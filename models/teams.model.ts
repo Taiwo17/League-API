@@ -17,6 +17,10 @@ const sequelize = new Sequelize(dbName, dbUser, dbPassword, {
 const Team = sequelize.define(
   'team',
   {
+    leagueId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
     teamName: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -29,6 +33,10 @@ const Team = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    captainId: {
+      type: DataTypes.INTEGER,
+      references: { model: Players, key: 'id' },
+    },
   },
   {
     freezeTableName: true,
@@ -36,14 +44,20 @@ const Team = sequelize.define(
   }
 )
 // Defining the association
+// One-to-many relationship
 
 Team.hasMany(Players, {
   onDelete: 'cascade',
   foreignKey: 'teamId',
 })
 
+Team.belongsTo(Players, {
+  onDelete: 'cascase',
+  foreignKey: 'captainId',
+})
+
 sequelize
-  .sync()
+  .sync({ alter: true })
   .then(() => console.log('Team has been sync'))
   .catch((error) => console.log(error.message))
 

@@ -1,8 +1,8 @@
 import { Sequelize, DataTypes, Dialect } from 'sequelize'
+import Team from './teams.model'
 import dotenv from 'dotenv'
 
 dotenv.config()
-
 const dbName = process.env.DB_NAME as string
 const dbUser = process.env.DB_USER as string
 const dbHost = process.env.DB_HOST
@@ -14,23 +14,19 @@ const sequelize = new Sequelize(dbName, dbUser, dbPassword, {
   dialect: dbDriver,
 })
 
-const Players = sequelize.define(
-  'players',
+const League = sequelize.define(
+  'league',
   {
-    teamId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    playerName: {
+    leagueName: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    playerPosition: {
+    location: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    age: {
-      type: DataTypes.INTEGER,
+    boardOfDirectors: {
+      type: DataTypes.STRING,
       allowNull: false,
     },
   },
@@ -39,10 +35,16 @@ const Players = sequelize.define(
     timestamps: true,
   }
 )
+// Defining the association
+
+League.hasMany(Team, {
+  onDelete: 'cascade',
+  foreignKey: 'leagueId',
+})
 
 sequelize
   .sync({ alter: true })
-  .then(() => console.log('Player has been sync'))
+  .then(() => console.log('Team has been sync'))
   .catch((error) => console.log(error.message))
 
-export default Players
+export default League

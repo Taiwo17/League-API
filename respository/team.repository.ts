@@ -1,10 +1,19 @@
-import { StatusCodes } from 'http-status-codes'
 import Team from '../models/teams.model'
 
 const TeamRepository = {
-  createTeam: async (teamDetails: any) => {
+  createTeam: async (
+    leagueId: number,
+    teamName: string,
+    location: string,
+    coach: string
+  ) => {
     try {
-      const createTeam = await Team.create(teamDetails)
+      const createTeam = await Team.create({
+        leagueId,
+        teamName,
+        location,
+        coach,
+      })
       return createTeam
     } catch (error: any) {
       console.log(error.message)
