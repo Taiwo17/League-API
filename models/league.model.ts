@@ -1,5 +1,7 @@
 import { Sequelize, DataTypes, Dialect } from 'sequelize'
 import Team from './teams.model'
+import Players from './player.model'
+import User from './user.model'
 import dotenv from 'dotenv'
 
 dotenv.config()
@@ -12,6 +14,7 @@ const dbPassword = process.env.DB_PASSWORD
 const sequelize = new Sequelize(dbName, dbUser, dbPassword, {
   host: dbHost,
   dialect: dbDriver,
+  logging: false,
 })
 
 const League = sequelize.define(
@@ -26,7 +29,7 @@ const League = sequelize.define(
       allowNull: false,
     },
     boardOfDirectors: {
-      type: DataTypes.STRING,
+      type: DataTypes.JSON,
       allowNull: false,
     },
   },
@@ -38,13 +41,28 @@ const League = sequelize.define(
 // Defining the association
 
 League.hasMany(Team, {
-  onDelete: 'cascade',
   foreignKey: 'leagueId',
 })
 
+Team.belongsTo(League)
+
 sequelize
   .sync({ alter: true })
-  .then(() => console.log('Team has been sync'))
-  .catch((error) => console.log(error.message))
+  .then(() => {
+    console.log('League has been sync')
+    return Team.sync({ alter: true })
+  })
+  .then(() => {
+    console.log('Team has been sync')
+    return Players.sync({ alter: true })
+  })
+  .then(() => {
+    console.log('Players has been sync')
+    return User.sync({ alter: true })
+  })
+  .then(() => {
+    console.log('User has been sync')
+  })
+  .catch((error) => console.log(error.stack))
 
 export default League

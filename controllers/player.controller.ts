@@ -69,6 +69,40 @@ const PlayerController = {
       console.log(error.stack)
     }
   },
+
+  setCaptain: async (req: Request, res: Response) => {
+    try {
+      const setCaptain = Number(req.params.playerId)
+
+      const getCaptainId = await PlayerRepository.getPlayerById(setCaptain)
+
+      const setCaptainPlayer = await PlayerRepository.setCaptain(
+        getCaptainId?.dataValues.id
+      )
+
+      if (setCaptainPlayer === undefined) {
+        return res.status(StatusCodes.NOT_FOUND).json({
+          message: 'Player not found!',
+        })
+      }
+
+      // console.log(setCaptainPlayer)
+
+      if (!setCaptainPlayer) {
+        return res.status(StatusCodes.NOT_FOUND).json({
+          message: `Player with ${setCaptain} not found`,
+        })
+      }
+
+      return res.status(StatusCodes.OK).json({
+        message: 'Player updated to captain',
+        data: getCaptainId,
+      })
+    } catch (error: any) {
+      console.log(error.message)
+    }
+  },
+
   updatePlayer: async (req: Request, res: Response) => {
     try {
       const playerId = Number(req.params.playerId)
@@ -95,10 +129,18 @@ const PlayerController = {
   deletePlayer: async (req: Request, res: Response) => {
     try {
       const playerId = Number(req.params.playerId)
-      const deleteOnePlayer = await PlayerRepository.deletePlayer(playerId)
+
+      const findPlayerId = await PlayerRepository.getPlayerById(playerId)
+
+      if (!findPlayerId) {
+        return res.status(StatusCodes.NOT_FOUND).json({
+          message: `Not found with the id ${playerId}`,
+        })
+      }
+
+      await PlayerRepository.deletePlayer(playerId)
       return res.status(StatusCodes.OK).json({
         message: 'Player deleted',
-        deleteOnePlayer,
       })
     } catch (error: any) {
       console.log(error.stack)

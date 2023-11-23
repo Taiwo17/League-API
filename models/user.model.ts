@@ -2,7 +2,6 @@ import { Sequelize, DataTypes, Dialect } from 'sequelize'
 import dotenv from 'dotenv'
 
 dotenv.config()
-
 const dbName = process.env.DB_NAME as string
 const dbUser = process.env.DB_USER as string
 const dbHost = process.env.DB_HOST
@@ -15,29 +14,25 @@ const sequelize = new Sequelize(dbName, dbUser, dbPassword, {
   logging: false,
 })
 
-const Players = sequelize.define(
-  'players',
+const User = sequelize.define(
+  'users',
   {
-    teamId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    playerName: {
+    name: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    playerPosition: {
+    email: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    age: {
-      type: DataTypes.INTEGER,
+    password: {
+      type: DataTypes.STRING,
       allowNull: false,
     },
-    isCaptain: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false,
-      allowNull: false,
+    roles: {
+      type: DataTypes.ENUM,
+      values: ['user', 'admin', 'superAdmin'],
+      defaultValue: 'user',
     },
   },
   {
@@ -46,4 +41,9 @@ const Players = sequelize.define(
   }
 )
 
-export default Players
+/* sequelize
+  .sync({ alter: true })
+  .then(() => console.log('Team has been sync'))
+  .catch((error) => console.log(error.message)) */
+
+export default User
