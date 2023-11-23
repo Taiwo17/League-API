@@ -1,4 +1,6 @@
+import League from '../models/league.model'
 import Players from '../models/player.model'
+import Team from '../models/teams.model'
 
 const PlayerRepository = {
   createPlayer: async (
@@ -69,6 +71,25 @@ const PlayerRepository = {
       if (!player) return 'Player does not exist'
       await player.update(updateDetails)
       return player
+    } catch (error: any) {
+      console.log(error.stack)
+    }
+  },
+
+  getPlayerWithTeam: async () => {
+    try {
+      const playerWithTeam = await Players.findAll({
+        attributes: {
+          exclude: ['createdAt', 'updatedAt'],
+        },
+        include: [
+          {
+            model: Team,
+            attributes: ['teamName'],
+          },
+        ],
+      })
+      return playerWithTeam
     } catch (error: any) {
       console.log(error.stack)
     }

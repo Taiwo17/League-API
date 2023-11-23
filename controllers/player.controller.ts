@@ -1,5 +1,5 @@
 import PlayerRepository from '../respository/player.repository'
-import { StatusCodes } from 'http-status-codes'
+import { StatusCodes, getStatusCode } from 'http-status-codes'
 import { Request, Response } from 'express'
 import TeamRepository from '../respository/team.repository'
 
@@ -121,6 +121,17 @@ const PlayerController = {
       return res.status(StatusCodes.OK).json({
         message: 'Player updated',
         data: updatedPlayer,
+      })
+    } catch (error: any) {
+      console.log(error.stack)
+    }
+  },
+  getPlayerWithTeam: async (req: Request, res: Response) => {
+    try {
+      const getPlayerWithTeam = await PlayerRepository.getPlayerWithTeam()
+      return res.status(StatusCodes.OK).json({
+        message: 'Player fetched',
+        data: getPlayerWithTeam,
       })
     } catch (error: any) {
       console.log(error.stack)

@@ -7,6 +7,7 @@ const router = express.Router()
 // User, Admin and Super Admin can get one and all player
 router.get('/get-player/:playerId', verifyToken, PlayerController.getOnePlayer)
 router.get('/all-players', verifyToken, PlayerController.getAllPlayers)
+router.get('/get-players-team', verifyToken, PlayerController.getPlayerWithTeam)
 
 // Only Admin and Super Admin can create a player
 router.post('/create-player/:teamId', adminCheck, PlayerController.createPlayer)
