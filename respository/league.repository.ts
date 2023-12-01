@@ -1,9 +1,9 @@
-import League from '../models/league.model'
+import DB from '../database/db'
 
 const LeagueRespository = {
   createLeague: async (leagueDetails: any) => {
     try {
-      const createLeague = await League.create(leagueDetails)
+      const createLeague = await DB.league.create(leagueDetails)
       return createLeague
     } catch (error: any) {
       console.log(error.stack)
@@ -11,7 +11,7 @@ const LeagueRespository = {
   },
   getLeagueById: async (id: number) => {
     try {
-      const leaugeId = await League.findByPk(id)
+      const leaugeId = await DB.league.findByPk(id)
       return leaugeId
     } catch (error: any) {
       console.log(error.stack)
@@ -19,7 +19,7 @@ const LeagueRespository = {
   },
   getAllLeague: async () => {
     try {
-      const getAllLeague = await League.findAll()
+      const getAllLeague = await DB.league.findAll()
       return getAllLeague
     } catch (error: any) {
       console.log(error.stack)
@@ -27,7 +27,7 @@ const LeagueRespository = {
   },
   deleteLeague: async (id: number) => {
     try {
-      const deleteLeague = await League.findByPk(id)
+      const deleteLeague = await DB.league.findByPk(id)
       if (!deleteLeague) return 'League does not exist'
       return deleteLeague.destroy()
     } catch (error: any) {

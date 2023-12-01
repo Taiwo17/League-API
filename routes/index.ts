@@ -6,9 +6,9 @@ import UserRouter from './user.route'
 
 const router = express.Router()
 
-router.use('/api/v1', TeamRouter)
-router.use('/api/v1', PlayerRouter)
+// router.use('/api/v1', TeamRouter)
+// router.use('/api/v1', PlayerRouter)
 router.use('/api/v1', LeagueRouter)
-router.use('/api/v1', UserRouter)
+// router.use('/api/v1', UserRouter)
 
 export default router

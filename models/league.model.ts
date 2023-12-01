@@ -1,52 +1,46 @@
-import { Sequelize, DataTypes, Dialect } from 'sequelize'
-import Team from './teams.model'
-import Players from './player.model'
-import User from './user.model'
-import dotenv from 'dotenv'
-
-dotenv.config()
-const dbName = process.env.DB_NAME as string
-const dbUser = process.env.DB_USER as string
-const dbHost = process.env.DB_HOST
-const dbDriver = process.env.DB_DRIVER as Dialect
-const dbPassword = process.env.DB_PASSWORD
-
-const sequelize = new Sequelize(dbName, dbUser, dbPassword, {
-  host: dbHost,
-  dialect: dbDriver,
-  logging: false,
-})
-
-const League = sequelize.define(
-  'league',
-  {
-    leagueName: {
-      type: DataTypes.STRING,
-      allowNull: false,
+/* export default function (sequelize: any, Sequelize: any) {
+  const League = sequelize.define(
+    'league',
+    {
+      leagueName: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      location: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      boardOfDirectors: {
+        type: Sequelize.JSON,
+        allowNull: false,
+      },
     },
-    location: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    boardOfDirectors: {
-      type: DataTypes.JSON,
-      allowNull: false,
-    },
-  },
-  {
-    freezeTableName: true,
-    timestamps: true,
+    {
+      freezeTableName: true,
+      timestamps: true,
+    }
+  )
+
+  League.associate = function (models: any) {
+    models.league.hasMany(models.team, {
+      foreignKey: 'leagueId',
+    })
   }
-)
+  League.associate = function (models: any) {
+    models.team.belongsTo(League)
+  }
+  return League
+} */
+
 // Defining the association
 
-League.hasMany(Team, {
+/* League.hasMany(Team, {
   foreignKey: 'leagueId',
 })
 
-Team.belongsTo(League)
+Team.belongsTo(League) */
 
-sequelize
+/* DataTypes
   .sync({ alter: true })
   .then(() => {
     console.log('League has been sync')
@@ -64,5 +58,35 @@ sequelize
     console.log('User has been sync')
   })
   .catch((error) => console.log(error.stack))
+ */
+// export default League
 
-export default League
+// File: ../models/league.js
+
+export default function (sequelize: any, DataTypes: any) {
+  const League = sequelize.define(
+    'league',
+    {
+      leagueName: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      location: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      boardOfDirectors: {
+        type: DataTypes.JSON,
+        allowNull: false,
+      },
+    },
+    {
+      freezeTableName: true,
+      timestamps: true,
+    }
+  )
+
+  /* Associations can be defined here */
+
+  return League
+}
