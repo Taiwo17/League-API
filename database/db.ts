@@ -1,19 +1,23 @@
 import fs from 'fs'
 import { Sequelize, DataTypes, Op, Dialect } from 'sequelize'
 import path from 'path'
+import dotenv from 'dotenv'
+import config from '../config/configSetup'
 
+
+dotenv.config()
 // Set the db to an object
 
-const dbName = process.env.DB_NAME as string
-const dbUser = process.env.DB_USER as string
-const dbHost = process.env.DB_HOST
-const dbDriver = process.env.DB_DRIVER as Dialect
-const dbPassword = process.env.DB_PASSWORD
+const dbName = config.DBNAME
+const dbUser = config.DBUSERNAME
+// const dbHost = config.DBHOST
+const dbPassword =config.DBPASSWORD
+
 
 let db = {} as any
 const sequelize: any = new Sequelize(dbName, dbUser, dbPassword, {
-  host: dbHost,
-  dialect: dbDriver,
+  host: config.DBHOST,
+  dialect: 'mysql',
   pool: {
     max: 5,
     min: 0,
